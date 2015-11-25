@@ -43,7 +43,7 @@ module.exports = {
             })
             var processPage = function (section, pagePath) {
                 var generateToc = function () {
-                    console.log("Generating TOC. Yeah!")
+                    book.log.info("Generating TOC.\n")
                     var $ = cheerio.load('<div />');
                     var root = $('div');
                     var lastNode = root;
@@ -74,7 +74,7 @@ module.exports = {
                 var data = fs.readFileSync(fullPath).toString();
                 var newData = processPage(data, pagePath)
                 if (newData != data) {
-                    console.log('Writing file: ', fullPath)
+                    book.log.info('Writing TOC in file: ', pagePath, '\n')
                     fs.writeFileSync(fullPath, newData);
                 }
             });

@@ -4,9 +4,18 @@
   "engines": {
     "gitbook": "*"
   },
+  "description": "A Plugin for Gitbook.IO that creates a Table of Contents from markdown headers",
   "dependencies": {
     "identify": "*",
     "cheerio": "*",
     "relative": "*"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zalando/gitbook-structured-toc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zalando/gitbook-structured-toc/issues"
   }
 }
