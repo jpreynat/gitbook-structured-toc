@@ -1,0 +1,12 @@
+{
+  "name": "gitbook-plugin-structured-toc ",
+  "version": "0.0.6",
+  "engines": {
+    "gitbook": "*"
+  },
+  "dependencies": {
+    "identify": "*",
+    "cheerio": "*",
+    "relative": "*"
+  }
+}
