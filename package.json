@@ -1,6 +1,6 @@
 {
   "name": "gitbook-plugin-structured-toc ",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "engines": {
     "gitbook": "*"
   },
@@ -10,7 +10,7 @@
     "cheerio": "*",
     "relative": "*"
   },
-  "license": "Apache-2.0",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/zalando/gitbook-structured-toc.git"

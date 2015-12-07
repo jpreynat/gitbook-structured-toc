@@ -22,7 +22,7 @@ var extractHeaderInfo = function (str) {
         }
     }
     var sanitized = removeTags(rest);
-    return {'level': level, 'content': sanitized, 'rawContent': rest}
+    return {'level': level, 'content': sanitized, 'rawContent': rest, 'originalContent': str}
 };
 var link = function (headerInfo, pagePath) {
     var targetFile = headerInfo.file;
@@ -102,10 +102,18 @@ module.exports = {
             }
             var pageIndex = findPageIndex();
             pages.push(pagePath);
+            var processMarkDown = function (str) {
+                return str
+                    .replace(/\*(\w+(.*\w+)?)\*/g, '<em>$1</em>')
+                    .replace(/\_(\w+(.*\w+)?)\_/g, '<em>$1</em>')
+                    .replace(/\*\*(\w+(.*\w+)?)\*\*/g, '<strong>$1</strong>')
+                    .replace(/\_\_(\w+(.*\w+)?)\_\_/g, '<strong>$1</strong>')
+            }
             page.content.split('\n').forEach(function (line, index) {
                 var headerInfo = extractHeaderInfo(line);
                 if (headerInfo.level > 0) {
-                    var header = identify('<h' + headerInfo.level + '>' + headerInfo.rawContent
+                    var header = identify('<h' + headerInfo.level + '>'
+                                          + processMarkDown(headerInfo.rawContent)
                                           + '</h'
                                           + headerInfo.level + '>');
                     newContent.push(header);
