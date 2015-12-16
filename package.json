@@ -1,19 +1,26 @@
 {
   "name": "gitbook-plugin-structured-toc ",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "engines": {
     "gitbook": "*"
   },
   "description": "A Plugin for Gitbook.IO that creates a Table of Contents from markdown headers",
   "dependencies": {
-    "identify": "*",
-    "cheerio": "*",
-    "relative": "*"
+    "cheerio": "^0.19.0",
+    "relative": "^3.0.2"
+  },
+  "devDependencies": {
+    "eslint": "^1.10.3",
+    "mocha": "^2.3.4",
+    "mocha-eslint": "^1.0.0"
   },
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/zalando/gitbook-structured-toc.git"
+  },
+  "scripts": {
+    "prepublish": "mocha"
   },
   "bugs": {
     "url": "https://github.com/zalando/gitbook-structured-toc/issues"
