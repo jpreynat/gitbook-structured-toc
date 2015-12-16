@@ -5,14 +5,14 @@ var fs = require('fs');
 module.exports = {
     hooks: {
         // during html generation
-        "finish": function (context) {
+        'finish': function () {
             var book = this;
             var placeHolder = /<!-- toc -->/g;
             headers.sortPages();
             var processPage = function (section, pagePath) {
                 var generateToc = function () {
                     return toc.generate(headers, pagePath);
-                }
+                };
                 var newSection = section.replace(placeHolder, generateToc);
                 return newSection;
             };
@@ -20,18 +20,18 @@ module.exports = {
             headers.pages.forEach(function (page) {
                 var fullPath = output + '/' + page.path;
                 var data = fs.readFileSync(fullPath).toString();
-                var newData = processPage(data, page.path)
+                var newData = processPage(data, page.path);
                 if (newData != data) {
-                    book.log.info('Writing TOC in file: ', page.path, '\n')
+                    book.log.info('Writing TOC in file: ', page.path, '\n');
                     fs.writeFileSync(fullPath, newData);
                 }
             });
         },
-        "init": function () {
-            headers.configure(this.options.pluginsConfig["gitbook-structured-toc"], this.log);
+        'init': function () {
+            headers.configure(this.options.pluginsConfig['gitbook-structured-toc'], this.log);
         },
         // After html generation
-        "page": function (page) {
+        'page': function (page) {
             if (this.options.generator != 'website') {
                 return page;
             }
@@ -45,7 +45,7 @@ module.exports = {
                     }
                 });
                 return index;
-            }
+            };
             var pageIndex = findPageIndex();
             page.sections.forEach(function (section) {
                 section.content =
