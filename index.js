@@ -1,5 +1,5 @@
-var headers = new require('./lib/Headers')();
-var toc = new require('./lib/TOC');
+var headers = new (require('./lib/Headers'))();
+var toc = new (require('./lib/TOC'))();
 var fs = require('fs');
 
 module.exports = {
@@ -11,18 +11,18 @@ module.exports = {
             headers.sortPages();
             var processPage = function (section, pagePath) {
                 var generateToc = function () {
-                    return toc.generate(headers, pagePath).html();
+                    return toc.generate(headers, pagePath);
                 }
                 var newSection = section.replace(placeHolder, generateToc);
                 return newSection;
             };
             var output = book.context.config.output;
-            pages.forEach(function (pagePath) {
-                var fullPath = output + '/' + pagePath;
+            headers.pages.forEach(function (page) {
+                var fullPath = output + '/' + page.path;
                 var data = fs.readFileSync(fullPath).toString();
-                var newData = processPage(data, pagePath)
+                var newData = processPage(data, page.path)
                 if (newData != data) {
-                    book.log.info('Writing TOC in file: ', pagePath, '\n')
+                    book.log.info('Writing TOC in file: ', page.path, '\n')
                     fs.writeFileSync(fullPath, newData);
                 }
             });
@@ -36,7 +36,7 @@ module.exports = {
                 return page;
             }
 
-            var pagePath = book.contentPath(page.path);
+            var pagePath = this.contentPath(page.path);
             var findPageIndex = function () {
                 var index = -1;
                 page.progress.chapters.forEach(function (chapter, ix) {
@@ -48,7 +48,8 @@ module.exports = {
             }
             var pageIndex = findPageIndex();
             page.sections.forEach(function (section) {
-                section.content = headers.linkHeaders(section.content, path, pageIndex, log);
+                section.content =
+                    headers.linkHeaders(section.content, pagePath, pageIndex, this.log);
             });
             return page;
         }
