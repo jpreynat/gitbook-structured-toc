@@ -8,7 +8,9 @@ module.exports = {
         'finish': function () {
             var book = this;
             var placeHolder = /<!-- toc -->/g;
+
             headers.sortPages();
+
             var processPage = function (section, pagePath) {
                 var generateToc = function () {
                     return toc.generate(headers, pagePath);
@@ -16,9 +18,11 @@ module.exports = {
                 var newSection = section.replace(placeHolder, generateToc);
                 return newSection;
             };
-            var output = book.context.config.output;
+
+            var output = book.output;
+
             headers.pages.forEach(function (page) {
-                var fullPath = output + '/' + page.path;
+                var fullPath = output.root() + '/' + page.path;
                 var data = fs.readFileSync(fullPath).toString();
                 var newData = processPage(data, page.path);
                 if (newData != data) {
@@ -27,16 +31,21 @@ module.exports = {
                 }
             });
         },
+
         'init': function () {
-            headers.configure(this.options.pluginsConfig['gitbook-structured-toc'], this.log);
+            headers.configure(this.config.get('pluginsConfig')['structured-toc'], this.log);
         },
+
         // After html generation
         'page': function (page) {
-            if (this.options.generator != 'website') {
+            if (this.output.name != 'website') {
                 return page;
             }
 
-            var pagePath = this.contentPath(page.path);
+            var pagePath = this.output.toURL(page.path);
+            if (pagePath.slice(-1) == '/')
+                pagePath += 'index.html';
+
             var findPageIndex = function () {
                 var index = -1;
                 page.progress.chapters.forEach(function (chapter, ix) {
@@ -46,11 +55,10 @@ module.exports = {
                 });
                 return index;
             };
+
             var pageIndex = findPageIndex();
-            page.sections.forEach(function (section) {
-                section.content =
-                    headers.linkHeaders(section.content, pagePath, pageIndex, this.log);
-            });
+            page.content = headers.linkHeaders(page.content, pagePath, pageIndex, this.log);
+
             return page;
         }
     }
